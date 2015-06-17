@@ -4,21 +4,15 @@ using System.Collections;
 public class Bullet : MonoBehaviour {
 	private Rigidbody rigidbody;
 
-	public void Shoot(float force) {
-		SetRigidbodyKinematic(false);
-		AddForwardImpulseForce(force);
+	public void AddImpulseForce(Vector3 force) {
+		rigidbody.AddForce(force, ForceMode.Impulse);
 	}
 
-	void Awake() {
+	public void AddImpulseTorque(Vector3 torque) {
+		rigidbody.AddTorque(torque, ForceMode.Impulse);
+	}
+
+	private void Awake() {
 		rigidbody = GetComponent<Rigidbody>();
-	}
-
-	private void SetRigidbodyKinematic(bool kinematic) {
-		rigidbody.isKinematic = kinematic;
-	}
-
-	private void AddForwardImpulseForce(float force) {
-		Vector3 forceVector = new Vector3(0, 0, force);
-		rigidbody.AddRelativeForce(forceVector, ForceMode.Impulse);
 	}
 }

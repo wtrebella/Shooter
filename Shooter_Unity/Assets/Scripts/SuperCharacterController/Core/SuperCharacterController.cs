@@ -368,6 +368,8 @@ public class SuperCharacterController : MonoBehaviour
         {
             foreach (Collider col in Physics.OverlapSphere(OffsetPosition(sphere.Offset), radius, Walkable))
             {
+				if (col.isTrigger) continue;
+
                 Vector3 position = OffsetPosition(sphere.Offset);
                 Vector3 contactPoint = SuperCollider.ClosestPointOnSurface(col, position, radius);
 

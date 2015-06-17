@@ -2,21 +2,42 @@
 using System.Collections;
 
 public class Player : MonoBehaviour {
-	public Transform firstPersonCharacter;
-	public LayerMask playerLayerMask;
+	[SerializeField] private Gun gunPrefab;
+	[SerializeField] private Transform gunHolder;
+	[SerializeField] private Transform playerCamera;
+	[SerializeField] private LayerMask playerLayerMask;
 
-	private void Update() {
-		if (Input.GetMouseButtonDown(0)) {
-			Collider collider = GetColliderAtReticle();
-			if (collider != null) Debug.Log(collider.name);
-		}
+	private Gun gun;
+
+	private void Awake() {
+		CreateGun();
 	}
 
-	private Collider GetColliderAtReticle() {
+	private void Update() {
+		if (Input.GetMouseButtonDown(0)) ShootGun();
+	}
+
+	private void CreateGun() {
+		gun = Instantiate(gunPrefab) as Gun;
+		gun.transform.parent = gunHolder;
+		gun.transform.localPosition = Vector3.zero;
+		gun.transform.localRotation = Quaternion.identity;
+	}
+
+	private RaycastHit GetHitAtReticle() {
 		RaycastHit hit;
-		Ray ray = new Ray(firstPersonCharacter.position, firstPersonCharacter.forward);
+		Ray ray = new Ray(playerCamera.position, GetLookDirection());
 		Physics.Raycast(ray, out hit, Mathf.Infinity, ~playerLayerMask.value);
 
-		return hit.collider;
+		return hit;
+	}
+
+	private Vector3 GetLookDirection() {
+		return playerCamera.forward;
+	}
+
+	private void ShootGun() {
+		RaycastHit hit = GetHitAtReticle();
+		gun.Shoot(GetLookDirection(), hit);
 	}
 }
