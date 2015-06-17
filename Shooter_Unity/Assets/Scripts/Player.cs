@@ -24,6 +24,11 @@ public class Player : MonoBehaviour {
 		gun.transform.localRotation = Quaternion.identity;
 	}
 
+	private void ShootGun() {
+		RaycastHit hit = GetHitAtReticle();
+		gun.Shoot(GetLookDirection(), hit);
+	}
+
 	private RaycastHit GetHitAtReticle() {
 		RaycastHit hit;
 		Ray ray = new Ray(playerCamera.position, GetLookDirection());
@@ -34,10 +39,5 @@ public class Player : MonoBehaviour {
 
 	private Vector3 GetLookDirection() {
 		return playerCamera.forward;
-	}
-
-	private void ShootGun() {
-		RaycastHit hit = GetHitAtReticle();
-		gun.Shoot(GetLookDirection(), hit);
 	}
 }
